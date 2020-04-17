@@ -1,0 +1,198 @@
+time.h(0P)                       POSIX Programmer's Manual                       time.h(0P)
+
+[1mPROLOG[0m
+       This manual page is part of the POSIX Programmer's Manual.  The Linux implementation
+       of this interface may differ  (consult  the  corresponding  Linux  manual  page  for
+       details of Linux behavior), or the interface may not be implemented on Linux.
+
+[1mNAME[0m
+       time.h — time types
+
+[1mSYNOPSIS[0m
+       #include <time.h>
+
+[1mDESCRIPTION[0m
+       Some  of  the functionality described on this reference page extends the ISO C stan‐
+       dard. Applications shall define the appropriate feature test macro (see  the  System
+       Interfaces  volume  of  POSIX.1‐2008,  [4mSection[24m  [4m2.2[24m, [4mThe[24m [4mCompilation[24m [4mEnvironment[24m) to
+       enable the visibility of these symbols in this header.
+
+       The [4m<time.h>[24m header shall define the [1mclock_t[22m, [1msize_t[22m, [1mtime_t[22m, types as described  in
+       [4m<sys/types.h>[24m.
+
+       The  [4m<time.h>[24m  header  shall  define the [1mclockid_t [22mand [1mtimer_t [22mtypes as described in
+       [4m<sys/types.h>[24m.
+
+       The [4m<time.h>[24m header shall define the [1mlocale_t [22mtype as described in [4m<locale.h>[24m.
+
+       The [4m<time.h>[24m header shall define the [1mpid_t [22mtype as described in [4m<sys/types.h>[24m.
+
+       The tag [1msigevent [22mshall be declared as naming an incomplete structure type, the  con‐
+       tents of which are described in the [4m<signal.h>[24m header.
+
+       The [4m<time.h>[24m header shall declare the [1mtm [22mstructure, which shall include at least the
+       following members:
+
+           [1mint    tm_sec   [22mSeconds [0,60].
+           int    tm_min   Minutes [0,59].
+           int    tm_hour  Hour [0,23].
+           int    tm_mday  Day of month [1,31].
+           int    tm_mon   Month of year [0,11].
+           int    tm_year  Years since 1900.
+           int    tm_wday  Day of week [0,6] (Sunday =0).
+           int    tm_yday  Day of year [0,365].
+           int    tm_isdst Daylight Savings flag.
+
+       The value of [4mtm_isdst[24m shall be positive if Daylight Savings Time is in effect, 0  if
+       Daylight  Savings  Time  is  not  in  effect, and negative if the information is not
+       available.
+
+       The [4m<time.h>[24m header shall declare the [1mtimespec [22mstructure,  which  shall  include  at
+       least the following members:
+
+           [1mtime_t  tv_sec    [22mSeconds.
+           long    tv_nsec   Nanoseconds.
+
+       The [4m<time.h>[24m header shall also declare the [1mitimerspec [22mstructure, which shall include
+       at least the following members:
+
+           [1mstruct timespec  it_interval  [22mTimer period.
+           struct timespec  it_value     Timer expiration.
+
+       The [4m<time.h>[24m header shall define the following macros:
+
+       NULL          As described in [4m<stddef.h>[24m.
+
+       CLOCKS_PER_SEC
+                     A number used to convert the value returned by  the  [4mclock[24m()  function
+                     into seconds. The value shall be an expression with type [1mclock_t[22m.  The
+                     value of CLOCKS_PER_SEC shall be 1 million on XSI-conformant  systems.
+                     However,  it  may  be  variable on other systems, and it should not be
+                     assumed that CLOCKS_PER_SEC is a compile-time constant.
+
+       The [4m<time.h>[24m header shall define the following symbolic constants. The values  shall
+       have a type that is assignment-compatible with [1mclockid_t[22m.
+
+       CLOCK_MONOTONIC
+                     The  identifier  for the system-wide monotonic clock, which is defined
+                     as a clock  measuring  real  time,  whose  value  cannot  be  set  via
+                     [4mclock_settime[24m()  and which cannot have negative clock jumps. The maxi‐
+                     mum possible clock jump shall be implementation-defined.
+
+       CLOCK_PROCESS_CPUTIME_ID
+                     The identifier of the CPU-time clock associated with the process  mak‐
+                     ing a [4mclock[24m() or [4mtimer*[24m() function call.
+
+       CLOCK_REALTIME
+                     The identifier of the system-wide clock measuring real time.
+
+       CLOCK_THREAD_CPUTIME_ID
+                     The identifier of the CPU-time clock associated with the thread making
+                     a [4mclock[24m() or [4mtimer*[24m() function call.
+
+       The [4m<time.h>[24m header shall define the following symbolic constant:
+
+       TIMER_ABSTIME Flag indicating time is absolute. For functions taking timer  objects,
+                     this refers to the clock associated with the timer.
+
+       The  [4m<time.h>[24m header shall provide a declaration or definition for [4mgetdate_err[24m.  The
+       [4mgetdate_err[24m symbol shall expand to an expression of type  [1mint[22m.   It  is  unspecified
+       whether  [4mgetdate_err[24m is a macro or an identifier declared with external linkage, and
+       whether or not it is a modifiable lvalue. If a macro  definition  is  suppressed  in
+       order  to  access an actual object, or a program defines an identifier with the name
+       [4mgetdate_err[24m, the behavior is undefined.
+
+       The following shall be declared as functions and may  also  be  defined  as  macros.
+       Function prototypes shall be provided.
+
+           [1mchar      *asctime(const struct tm *);[0m
+           [1mchar      *asctime_r(const struct tm *restrict, char *restrict);[0m
+           [1mclock_t    clock(void);[0m
+           [1mint        clock_getcpuclockid(pid_t, clockid_t *);[0m
+           [1mint        clock_getres(clockid_t, struct timespec *);[0m
+           [1mint        clock_gettime(clockid_t, struct timespec *);[0m
+           [1mint        clock_nanosleep(clockid_t, int, const struct timespec *,[0m
+                          [1mstruct timespec *);[0m
+           [1mint        clock_settime(clockid_t, const struct timespec *);[0m
+           [1mchar      *ctime(const time_t *);[0m
+           [1mchar      *ctime_r(const time_t *, char *);[0m
+           [1mdouble     difftime(time_t, time_t);[0m
+           [1mstruct tm *getdate(const char *);[0m
+           [1mstruct tm *gmtime(const time_t *);[0m
+           [1mstruct tm *gmtime_r(const time_t *restrict, struct tm *restrict);[0m
+           [1mstruct tm *localtime(const time_t *);[0m
+           [1mstruct tm *localtime_r(const time_t *restrict, struct tm *restrict);[0m
+           [1mtime_t     mktime(struct tm *);[0m
+           [1mint        nanosleep(const struct timespec *, struct timespec *);[0m
+           [1msize_t     strftime(char *restrict, size_t, const char *restrict,[0m
+                      [1mconst struct tm *restrict);[0m
+           [1msize_t     strftime_l(char *restrict, size_t, const char *restrict,[0m
+                          [1mconst struct tm *restrict, locale_t);[0m
+           [1mchar      *strptime(const char *restrict, const char *restrict,[0m
+                          [1mstruct tm *restrict);[0m
+           [1mtime_t     time(time_t *);[0m
+           [1mint        timer_create(clockid_t, struct sigevent *restrict,[0m
+                          [1mtimer_t *restrict);[0m
+           [1mint        timer_delete(timer_t);[0m
+           [1mint        timer_getoverrun(timer_t);[0m
+           [1mint        timer_gettime(timer_t, struct itimerspec *);[0m
+           [1mint        timer_settime(timer_t, int, const struct itimerspec *restrict,[0m
+                          [1mstruct itimerspec *restrict);[0m
+           [1mvoid       tzset(void);[0m
+
+       The [4m<time.h>[24m header shall declare the following as variables:
+
+           [1mextern int    daylight;[0m
+           [1mextern long   timezone;[0m
+           [1mextern char  *tzname[];[0m
+
+       Inclusion  of  the  [4m<time.h>[24m header may make visible all symbols from the [4m<signal.h>[0m
+       header.
+
+       [4mThe[24m [4mfollowing[24m [4msections[24m [4mare[24m [4minformative.[0m
+
+[1mAPPLICATION USAGE[0m
+       The range [0,60] for [4mtm_sec[24m allows for the occasional leap second.
+
+       [4mtm_year[24m is a signed value; therefore, years before 1900 may be represented.
+
+       To obtain the number of clock ticks per second returned  by  the  [4mtimes[24m()  function,
+       applications should call [4msysconf[24m(_SC_CLK_TCK).
+
+[1mRATIONALE[0m
+       The  range  [0,60] seconds allows for positive or negative leap seconds.  The formal
+       definition of UTC does not permit double leap seconds, so all mention of double leap
+       seconds  has  been  removed,  and the range shortened from the former [0,61] seconds
+       seen in earlier versions of this standard.
+
+[1mFUTURE DIRECTIONS[0m
+       None.
+
+[1mSEE ALSO[0m
+       [1m<locale.h>[22m, [1m<signal.h>[22m, [1m<stddef.h>[22m, [1m<sys_types.h>[0m
+
+       The System Interfaces volume of POSIX.1‐2008, [4mSection[24m [4m2.2[24m, [4mThe[24m [4mCompilation[24m [4mEnviron‐[0m
+       [4mment[24m, [4masctime[24m(), [4mclock[24m(), [4mclock_getcpuclockid[24m(), [4mclock_getres[24m(), [4mclock_nanosleep[24m(),
+       [4mctime[24m(), [4mdifftime[24m(), [4mgetdate[24m(), [4mgmtime[24m(), [4mlocaltime[24m(), [4mmktime[24m(), [4mmq_receive[24m(),
+       [4mmq_send[24m(), [4mnanosleep[24m(), [4mpthread_getcpuclockid[24m(), [4mpthread_mutex_timedlock[24m(),
+       [4mpthread_rwlock_timedrdlock[24m(), [4mpthread_rwlock_timedwrlock[24m(), [4msem_timedwait[24m(), [4mstrf‐[0m
+       [4mtime[24m(), [4mstrptime[24m(), [4msysconf[24m(), [4mtime[24m(), [4mtimer_create[24m(), [4mtimer_delete[24m(),
+       [4mtimer_getoverrun[24m(), [4mtzset[24m(), [4mutime[24m()
+
+[1mCOPYRIGHT[0m
+       Portions of this text are reprinted and reproduced in electronic form from IEEE  Std
+       1003.1, 2013 Edition, Standard for Information Technology -- Portable Operating Sys‐
+       tem Interface (POSIX), The Open Group Base Specifications  Issue  7,  Copyright  (C)
+       2013  by  the  Institute  of  Electrical and Electronics Engineers, Inc and The Open
+       Group.  (This is POSIX.1-2008 with the 2013 Technical Corrigendum 1 applied.) In the
+       event  of  any  discrepancy  between this version and the original IEEE and The Open
+       Group Standard, the original IEEE and The Open Group Standard is the  referee  docu‐
+       ment.     The     original     Standard     can     be     obtained     online    at
+       http://www.unix.org/online.html .
+
+       Any typographical or formatting errors that appear in this page are most  likely  to
+       have  been  introduced during the conversion of the source files to man page format.
+       To report such errors, see  https://www.kernel.org/doc/man-pages/reporting_bugs.html
+       .
+
+IEEE/The Open Group                         2013                                 time.h(0P)
